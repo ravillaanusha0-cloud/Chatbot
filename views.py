@@ -1,7 +1,15 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import re 
+from openai import OpenAI
+import os
 
+def get_response(user_input):
+    response = OpenAI.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": user_input}]
+    )
+    return response['choices'][0].message.content
 
 # ---------- PAGE LOAD ----------
 def index(request):
@@ -34,7 +42,7 @@ def get_response(request):
         # WHY handling
         if cleaned_msg in ["why", "explain"]:
             if last_answer:
-                bot_reply = "Here's why: " + last_answer
+                bot_reply = "Here's why: " + last_answer+ "Im a learning agent you can also teach me why this can be the answer."
             else:
                 bot_reply = "Why about what? Please ask something first."
 
